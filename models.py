@@ -14,7 +14,9 @@ class User(db.Model):
     # TODO: Add id primary key, username (unique + required), and
     # a relationship to ``Post`` named ``posts``.
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String)  # Students should customize constraints
+    username = db.Column(db.String, unique=True, nullable=False)
+    posts = db.relationship('Post', backref='author', lazy=True)
+    # Students should customize constraints
 
     def __repr__(self):  # pragma: no cover - convenience repr
         return f"<User {getattr(self, 'username', None)}>"
@@ -30,7 +32,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     content = db.Column(db.Text)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     def __repr__(self):  # pragma: no cover - convenience repr
         return f"<Post {getattr(self, 'title', None)}>"
